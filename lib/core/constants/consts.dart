@@ -25,13 +25,17 @@ class ErrorAppTexts {
 class ApiAppTexts {
   const ApiAppTexts();
 
-  String get pokemonListApiUrl => 'https://pokeapi.co/api/v2/pokemon?limit=151';
+  String pokemonListApiUrlWithOffset(int offSet) =>
+      'https://pokeapi.co/api/v2/pokemon?limit=20&offset=$offSet';
+  String get pokemonListApiUrl =>
+      'https://pokeapi.co/api/v2/pokemon?limit=20&offset=';
   String get shapesBaseApiUrl => 'https://pokeapi.co/api/v2/pokemon-shape/';
   String get speciesBaseApiUrl => 'https://pokeapi.co/api/v2/pokemon-species/';
+  int get itemPrePage => 20;
 }
 
 class UIAppTexts {
   const UIAppTexts();
 
-  String get title => 'Pokemon Game';
+  String get appTitle => 'Pokemon Game';
 }
