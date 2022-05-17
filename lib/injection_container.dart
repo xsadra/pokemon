@@ -5,21 +5,22 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'core/core.dart';
 import 'data/datasources/dataSources.dart';
 import 'data/repository/pokemon_list_repository.dart';
+import 'presentation/bloc/pokemon/bloc.dart';
 
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  // sl.registerFactory(
-  //   () => PokemonBloc(upcomingChests: sl()),
-  // );
+  sl.registerFactory(
+    () => PokemonBloc(repository: sl()),
+  );
 
   sl.registerLazySingleton<PokemonRepository>(
     () => PokemonRepositoryImpl(
-      pokemonListRemoteDataSource: sl(),
-      pokemonRemoteDataSource: sl(),
+      pokemonListDataSource: sl(),
+      pokemonDataSource: sl(),
       networkInfo: sl(),
-      speciesRemoteDataSource: sl(),
-      shapesRemoteDataSource: sl(),
+      speciesDataSource: sl(),
+      shapesDataSource: sl(),
     ),
   );
 

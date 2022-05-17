@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart' show immutable;
-
-import '../../../domain/entities/Pokemon.dart';
+import 'package:pokemon/domain/entities/pokemons.dart';
 
 @immutable
 abstract class PokemonState {}
@@ -10,7 +9,7 @@ class Empty extends PokemonState {}
 class Loading extends PokemonState {}
 
 class Loaded extends PokemonState {
-  final List<Pokemon> pokemons;
+  final Pokemons pokemons;
 
   Loaded({
     required this.pokemons,

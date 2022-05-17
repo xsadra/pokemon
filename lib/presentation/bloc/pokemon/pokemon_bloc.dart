@@ -16,17 +16,18 @@ class PokemonBloc extends Bloc<PokemonEvent, PokemonState> {
   @override
   Stream<PokemonState> mapEventToState(PokemonEvent event) async* {
     if (event is GetPokemonEvent) {
-      logger.i('Loading', 'PokemonBloc');
+      logShort.i('Loading', 'PokemonBloc');
       yield Loading();
-      logger.i('getPokemons', 'PokemonBloc');
-      final failureOrPokemons = await _repository.getPokemons();
-      logger.i('getBattles fold', 'PokemonBloc');
+      logShort.i('getPokemons', 'PokemonBloc');
+      final failureOrPokemons =
+          await _repository.getPokemons(offSet: event.offSet);
+      logShort.i('getBattles fold', 'PokemonBloc');
       yield failureOrPokemons.fold(
         (failure) => Error(message: failure.toMessage),
         (pokemons) => Loaded(pokemons: pokemons),
       );
     } else {
-      logger.e('Unexpected event', 'PokemonBloc');
+      logShort.e('Unexpected event', 'PokemonBloc');
       yield Error(message: App.error.unexpectedEvent);
     }
   }

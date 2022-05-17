@@ -1,4 +1,4 @@
-import '../../domain/entities/Pokemon.dart';
+import '../../domain/entities/pokemon.dart';
 
 class PokemonModel extends Pokemon {
   PokemonModel({
