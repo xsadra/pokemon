@@ -1,7 +1,7 @@
-import 'dart:developer';
+import 'package:flutter/material.dart' hide Router;
 
-import 'package:flutter/material.dart';
-
+import 'core/core.dart';
+import 'core/routes/router.dart';
 import 'data/repository/pokemon_list_repository.dart';
 import 'domain/entities/Pokemon.dart';
 import 'injection_container.dart' as injection;
@@ -21,15 +21,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final _router = Router();
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(),
+    return MaterialApp.router(
+      routeInformationParser: _router.defaultRouteParser(),
+      routerDelegate: _router.delegate(),
     );
   }
 }

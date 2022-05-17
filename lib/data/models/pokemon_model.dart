@@ -62,6 +62,7 @@ class PokemonModel extends Pokemon {
     );
   }
 
+  @override
   PokemonModel copyWith({
     String? name,
     String? image,

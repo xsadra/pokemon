@@ -6,11 +6,11 @@ class App {
   App._();
 }
 
-class AppRouteTexts {
-  AppRouteTexts();
+class AppRoute {
+  AppRoute._();
 
-  static const DETAIL_PAGE_ROUTE = 'DetailPageRoute';
-  static const POKEMON_PAGE_ROUTE = 'PokemonPageRoute';
+  static const detailsPageRoute = 'DetailsPageRoute';
+  static const homePageRoute = 'HomePageRoute';
 }
 
 class ErrorAppTexts {
