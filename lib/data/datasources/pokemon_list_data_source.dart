@@ -6,7 +6,7 @@ import '../../core/core.dart';
 import '../models/pokemon_list_model.dart';
 
 abstract class PokemonListRemoteDataSource {
-  Future<PokemonListModel> getPokemons();
+  Future<PokemonListModel> getPokemons({required int offSet});
 }
 
 class PokemonListRemoteDataSourceImpl implements PokemonListRemoteDataSource {
@@ -17,10 +17,10 @@ class PokemonListRemoteDataSourceImpl implements PokemonListRemoteDataSource {
   });
 
   @override
-  Future<PokemonListModel> getPokemons() async {
+  Future<PokemonListModel> getPokemons({required int offSet}) async {
     final response = await dio
         .get(
-          App.api.pokemonListApiUrl,
+          App.api.pokemonListApiUrlWithOffset(offSet),
           options: Options(headers: {
             'Content-Type': 'application/json',
           }),

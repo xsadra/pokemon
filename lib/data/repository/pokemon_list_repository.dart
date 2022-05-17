@@ -1,79 +1,76 @@
-import 'dart:developer';
-
 import 'package:dartz/dartz.dart';
+import 'package:pokemon/domain/entities/pokemons.dart';
 
 import '../../core/core.dart';
-import '../../domain/entities/Pokemon.dart';
+import '../../domain/entities/pokemon.dart';
 import '../datasources/dataSources.dart';
 
 abstract class PokemonRepository {
-  Future<Either<Failure, List<Pokemon>>> getPokemons();
+  Future<Either<Failure, Pokemons>> getPokemons({required int offSet});
 }
 
 class PokemonRepositoryImpl implements PokemonRepository {
   final NetworkInfo networkInfo;
-  final PokemonListRemoteDataSource pokemonListRemoteDataSource;
-  final PokemonRemoteDataSource pokemonRemoteDataSource;
-  final ShapesRemoteDataSource shapesRemoteDataSource;
-  final SpeciesRemoteDataSource speciesRemoteDataSource;
+  final PokemonListRemoteDataSource pokemonListDataSource;
+  final PokemonRemoteDataSource pokemonDataSource;
+  final ShapesRemoteDataSource shapesDataSource;
+  final SpeciesRemoteDataSource speciesDataSource;
 
   PokemonRepositoryImpl({
     required this.networkInfo,
-    required this.pokemonListRemoteDataSource,
-    required this.pokemonRemoteDataSource,
-    required this.shapesRemoteDataSource,
-    required this.speciesRemoteDataSource,
+    required this.pokemonListDataSource,
+    required this.pokemonDataSource,
+    required this.shapesDataSource,
+    required this.speciesDataSource,
   });
 
   @override
-  Future<Either<Failure, List<Pokemon>>> getPokemons() async {
+  Future<Either<Failure, Pokemons>> getPokemons({required int offSet}) async {
     if (await networkInfo.isConnected) {
-      log('Device has Internet connection', name: 'PokemonRepositoryImpl');
+      logShort.i('Device has Internet connection');
       try {
-        final remotePokemonList =
-            await pokemonListRemoteDataSource.getPokemons();
+        final pokemonList =
+            await pokemonListDataSource.getPokemons(offSet: offSet);
 
-        var pokemonList = <Pokemon>[];
-        // remotePokemonList.pokemons.map((e) =>  _itemToPokemon(e)).toList();
-        remotePokemonList.pokemons.forEach((element) async {
+        var pokemons = <Pokemon>[];
+        pokemonList.pokemons.forEach((element) async {
           final pokemon = await _getPokemon(element.url);
-          // var shapes = await _getShapesName(pokemon.id!);
-          // var species = await _getSpeciesName(pokemon.id!);
-          // pokemon.copyWith(
-          //   //    species: species,
-          // //  shapes: shapes,
-          // );
-          pokemonList.add(pokemon);
+          pokemons.add(pokemon);
         });
-        log('----------result------', name: 'PokemonRepositoryImpl');
-        log(pokemonList.map((e) => e.toString()).join(' \n\n\n '),
-            name: 'PokemonRepositoryImpl');
-        return right(pokemonList);
+
+        logShort.i('---------- result ----------', 'PokemonRepository');
+        logShort.i(pokemons.map((e) => e.toString()).join(' \n\n\n '),
+            'PokemonRepository');
+        return right(Pokemons(
+          items: pokemons,
+          hasNextPage: pokemonList.hasNextPage,
+          offSet: offSet,
+        )..increaseOffSet());
       } on ServerException {
         return Left(ServerFailure());
       }
     }
-    log('No Internet connection', name: 'PokemonRepositoryImpl');
+    logShort.e('No Internet connection');
     return Left(NoInternetFailure());
   }
 
   Future<Pokemon> _getPokemon(String url) async {
     if (await networkInfo.isConnected) {
-      return await pokemonRemoteDataSource.getPokemon(url);
+      return await pokemonDataSource.getPokemon(url);
     }
     throw NoInternetException();
   }
 
   Future<String> _getShapesName(int id) async {
     if (await networkInfo.isConnected) {
-      return await shapesRemoteDataSource.getShapes(id);
+      return await shapesDataSource.getShapes(id);
     }
     throw NoInternetException();
   }
 
   Future<String> _getSpeciesName(int id) async {
     if (await networkInfo.isConnected) {
-      return await speciesRemoteDataSource.getSpecies(id);
+      return await speciesDataSource.getSpecies(id);
     }
     throw NoInternetException();
   }

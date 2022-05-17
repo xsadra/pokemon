@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 import '../../core/core.dart';
-import '../../domain/entities/Pokemon.dart';
+import '../../domain/entities/pokemon.dart';
 import '../models/pokemon_model.dart';
 
 abstract class PokemonRemoteDataSource {

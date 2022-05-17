@@ -3,32 +3,30 @@ class PokemonListModel {
   final String next;
   final String previous;
   final List<PokemonListItemModel> pokemons;
+  final bool isFirstPage;
+  final bool hasNextPage;
+  final int offSet;
 
   const PokemonListModel({
     required this.count,
     this.next = '',
     this.previous = '',
     required this.pokemons,
+    this.isFirstPage = true,
+    this.hasNextPage = false,
+    this.offSet = 0,
   });
 
-  Map<String, dynamic> toJson() {
-    return {
-      'count': count,
-      'next': next,
-      'previous': previous,
-      'pokemons': pokemons,
-    };
-  }
-
-  factory PokemonListModel.fromJson(Map<String, dynamic> map) {
+  factory PokemonListModel.fromJson(Map<String, dynamic> json) {
     return PokemonListModel(
-      count: map['count'] as int,
-      next: map['next'] as String,
-      previous: (map['previous'] == null ? '' : map['previous'] as String),
-      pokemons: (map['results'] as List)
-          .map((e) => PokemonListItemModel.fromJson(e))
-          .toList(),
-    );
+        count: json['count'] as int,
+        next: json['next'] as String,
+        previous: (json['previous'] == null ? '' : json['previous'] as String),
+        pokemons: (json['results'] as List)
+            .map((e) => PokemonListItemModel.fromJson(e))
+            .toList(),
+        hasNextPage: json['next'] != null,
+        isFirstPage: json['previous'] == null);
   }
 
   @override
