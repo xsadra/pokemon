@@ -20,7 +20,7 @@ class PokemonListRemoteDataSourceImpl implements PokemonListRemoteDataSource {
   Future<PokemonListModel> getPokemons() async {
     final response = await dio
         .get(
-          Consts.pokemonListApiUrl,
+          App.api.pokemonListApiUrl,
           options: Options(headers: {
             'Content-Type': 'application/json',
           }),

@@ -17,11 +17,11 @@ class ShapesRemoteDataSourceImpl implements ShapesRemoteDataSource {
 
   @override
   Future<String> getShapes(int id) async {
-    log(Consts.shapesBaseApiUrl + id.toString(),
+    log(App.api.shapesBaseApiUrl + id.toString(),
         name: 'ShapesRemoteDataSource');
     final response = await dio
         .get(
-          Consts.shapesBaseApiUrl + id.toString(),
+          App.api.shapesBaseApiUrl + id.toString(),
           options: Options(headers: {
             'Content-Type': 'application/json',
           }),

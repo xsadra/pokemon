@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 
 import '../../core/core.dart';
@@ -32,7 +30,7 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
     });
 
     PokemonModel pokemon = PokemonModel.fromJson(response.data);
-    log(pokemon.toString(), name: 'PokemonRemoteDataSourceImpl');
+    logs.d(pokemon.toString());
 
     return pokemon;
   }

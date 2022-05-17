@@ -20,7 +20,7 @@ class SpeciesRemoteDataSourceImpl implements SpeciesRemoteDataSource {
   Future<String> getSpecies(int id) async {
     final response = await dio
         .get(
-          Consts.speciesBaseApiUrl + id.toString(),
+          App.api.speciesBaseApiUrl + id.toString(),
           options: Options(headers: {
             'Content-Type': 'application/json',
           }),
