@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 
-import '../../core/error/exceptions.dart';
+import '../../core/core.dart';
 import '../../domain/entities/Pokemon.dart';
 import '../models/pokemon_model.dart';
 

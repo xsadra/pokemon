@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart' show GetIt;
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
+import 'core/core.dart';
 import 'data/datasources/dataSources.dart';
 import 'data/repository/pokemon_list_repository.dart';
 
@@ -15,7 +17,7 @@ Future<void> init() async {
     () => PokemonRepositoryImpl(
       pokemonListRemoteDataSource: sl(),
       pokemonRemoteDataSource: sl(),
-      //  networkInfo: sl(),
+      networkInfo: sl(),
       speciesRemoteDataSource: sl(),
       shapesRemoteDataSource: sl(),
     ),
@@ -37,11 +39,11 @@ Future<void> init() async {
     () => PokemonRemoteDataSourceImpl(dio: sl()),
   );
 
-  // sl.registerLazySingleton<NetworkInfo>(
-  //   () => NetworkInfoImpl(sl()),
-  // );
+  sl.registerLazySingleton<NetworkInfo>(
+    () => NetworkInfoImpl(sl()),
+  );
 
   sl.registerLazySingleton(() => Dio());
 
-  // sl.registerLazySingleton(() => DataConnectionChecker());
+  sl.registerLazySingleton(() => InternetConnectionChecker());
 }
