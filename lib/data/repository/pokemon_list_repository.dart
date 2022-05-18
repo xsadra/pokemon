@@ -27,7 +27,8 @@ class PokemonRepositoryImpl implements PokemonRepository {
   @override
   Future<Either<Failure, Pokemons>> getPokemons({required int offSet}) async {
     if (await networkInfo.isConnected) {
-      logShort.i('Device has Internet connection');
+      logShort.i('Device has Internet connection', 'PokemonRepository');
+      logShort.i('OffSet: $offSet', 'PokemonRepository');
       try {
         final pokemonList =
             await pokemonListDataSource.getPokemons(offSet: offSet);
@@ -38,9 +39,8 @@ class PokemonRepositoryImpl implements PokemonRepository {
           pokemons.add(pokemon);
         });
 
-        logShort.i('---------- result ----------', 'PokemonRepository');
-        logShort.i(pokemons.map((e) => e.toString()).join(' \n\n\n '),
-            'PokemonRepository');
+        logShort.i(
+            pokemons.map((e) => e.toString()).join('\n'), 'PokemonRepository');
         return right(Pokemons(
           items: pokemons,
           hasNextPage: pokemonList.hasNextPage,
@@ -50,7 +50,7 @@ class PokemonRepositoryImpl implements PokemonRepository {
         return Left(ServerFailure());
       }
     }
-    logShort.e('No Internet connection');
+    logShort.e('No Internet connection', 'PokemonRepository');
     return Left(NoInternetFailure());
   }
 

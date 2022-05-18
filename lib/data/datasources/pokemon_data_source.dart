@@ -17,6 +17,7 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
 
   @override
   Future<Pokemon> getPokemon(String url) async {
+    logShort.wtf(url, 'PokemonRemoteDataSource');
     final response = await dio
         .get(
           url,
@@ -30,7 +31,7 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
     });
 
     PokemonModel pokemon = PokemonModel.fromJson(response.data);
-    logs.d(pokemon.toString());
+    logShort.d(pokemon.toString(), 'PokemonRemoteDataSource');
 
     return pokemon;
   }
