@@ -6,7 +6,8 @@ import '../../domain/entities/pokemon.dart';
 import '../datasources/dataSources.dart';
 
 abstract class PokemonRepository {
-  Future<Either<Failure, Pokemons>> getPokemons({required int offSet});
+  Future<Either<Failure, Pokemons>> getPokemons(
+      {required int offSet, required List<Pokemon> oldList});
 }
 
 class PokemonRepositoryImpl implements PokemonRepository {
@@ -25,7 +26,8 @@ class PokemonRepositoryImpl implements PokemonRepository {
   });
 
   @override
-  Future<Either<Failure, Pokemons>> getPokemons({required int offSet}) async {
+  Future<Either<Failure, Pokemons>> getPokemons(
+      {required int offSet, required List<Pokemon> oldList}) async {
     if (await networkInfo.isConnected) {
       logShort.i('Device has Internet connection', 'PokemonRepository');
       logShort.i('OffSet: $offSet', 'PokemonRepository');
@@ -33,11 +35,11 @@ class PokemonRepositoryImpl implements PokemonRepository {
         final pokemonList =
             await pokemonListDataSource.getPokemons(offSet: offSet);
 
-        var pokemons = <Pokemon>[];
-        pokemonList.pokemons.forEach((element) async {
+        List<Pokemon> pokemons = oldList.isEmpty ? [] : oldList;
+        for (var element in pokemonList.pokemons) {
           final pokemon = await _getPokemon(element.url);
           pokemons.add(pokemon);
-        });
+        }
 
         logShort.i(
             pokemons.map((e) => e.toString()).join('\n'), 'PokemonRepository');
@@ -45,7 +47,7 @@ class PokemonRepositoryImpl implements PokemonRepository {
           items: pokemons,
           hasNextPage: pokemonList.hasNextPage,
           offSet: offSet,
-        )..increaseOffSet());
+        ));
       } on ServerException {
         return Left(ServerFailure());
       }
