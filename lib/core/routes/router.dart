@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
+import '../../domain/entities/pokemon.dart';
 import '../../presentation/pages/pages.dart';
 
 part 'router.gr.dart';
